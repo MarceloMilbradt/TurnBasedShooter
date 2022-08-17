@@ -11,6 +11,7 @@ public class Unit : MonoBehaviour
     private HealthSystem healthSystem;
     private BaseAction[] baseActionArray;
     public static event EventHandler OnAnyActionPointsChanged;
+
     [SerializeField] private bool isEnemy;
     [SerializeField] private int actionPoints = 4;
     [SerializeField] private int maxActionPoints = 6;

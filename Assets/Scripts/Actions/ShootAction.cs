@@ -43,6 +43,7 @@ public class ShootAction : BaseAction
                 if(canShoot)
                 {
                     Shoot();
+                    canShoot = false;
                 }
                 break;
             case State.Cooloff:
