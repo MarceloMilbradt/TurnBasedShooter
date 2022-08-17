@@ -8,7 +8,8 @@ public abstract class BaseAction : MonoBehaviour
     protected bool isActive;
     protected Unit unit;
     protected Action actionCompleted;
-
+    public static event EventHandler OnAnyActionStarted;
+    public static event EventHandler OnAnyActionComplete;
     protected virtual void Awake()
     {
         unit = GetComponent<Unit>();
@@ -29,10 +30,17 @@ public abstract class BaseAction : MonoBehaviour
     {
         isActive = true;
         actionCompleted = action;
+        OnAnyActionStarted?.Invoke(this, EventArgs.Empty);
     }
     protected void ActionComplete()
     {
         isActive = false;
         actionCompleted();
+        OnAnyActionComplete?.Invoke(this, EventArgs.Empty);
+    }
+
+    public Unit GetUnit()
+    {
+        return unit;
     }
 }

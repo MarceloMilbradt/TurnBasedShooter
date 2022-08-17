@@ -34,8 +34,8 @@ public class MoveAction : BaseAction
         transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
         if (!isMoving)
         {
-            ActionComplete();
             OnStop?.Invoke(this, EventArgs.Empty);
+            ActionComplete();
         }
     }
    
@@ -61,8 +61,8 @@ public class MoveAction : BaseAction
     public override void TakeAction(GridPosition target, Action action)
     {
         targetPosition = LevelGrid.Instance.GetWorldPosition(target);
-        ActionStart(action);
         OnStart?.Invoke(this, EventArgs.Empty);
+        ActionStart(action);
     }
 
     public override string GetActionName()

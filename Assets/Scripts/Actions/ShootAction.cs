@@ -71,15 +71,15 @@ public class ShootAction : BaseAction
         {
             case State.Aiming:
                 state = State.Shooting;
-                stateTimer = .1f;
+                stateTimer = .2f;
                 break;
             case State.Shooting:
                 state = State.Cooloff;
-                stateTimer = .1f;
+                stateTimer = .5f;
                 break;
             case State.Cooloff:
-                ActionComplete();
                 OnStop?.Invoke(this, EventArgs.Empty);
+                ActionComplete();
                 break;
         }
     }
@@ -114,5 +114,9 @@ public class ShootAction : BaseAction
             }
         }
         return validPositions;
+    }
+    public Unit GetTargetUnit()
+    {
+        return target;
     }
 }
