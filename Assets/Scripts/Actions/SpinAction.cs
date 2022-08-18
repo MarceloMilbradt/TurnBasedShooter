@@ -33,5 +33,12 @@ public class SpinAction : BaseAction
         var unitGridPostion = unit.GetGridPosition();
         return new List<GridPosition> { unitGridPostion };
     }
-    
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        return new EnemyAIAction
+        {
+            gridPosition = gridPosition,
+            actionValue = 0
+        };
+    }
 }

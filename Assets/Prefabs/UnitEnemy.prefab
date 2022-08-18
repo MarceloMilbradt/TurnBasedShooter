@@ -29,6 +29,11 @@ PrefabInstance:
       propertyPath: isEnemy
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7433597486501897076, guid: a074ae7262b787045bbbb06d604e53e6,
+        type: 3}
+      propertyPath: actionPoints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7433597486501897077, guid: a074ae7262b787045bbbb06d604e53e6,
         type: 3}
       propertyPath: m_RootOrder
