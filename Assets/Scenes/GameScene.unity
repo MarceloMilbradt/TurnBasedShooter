@@ -357,6 +357,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &173058513
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 173058515}
+  - component: {fileID: 173058514}
+  m_Layer: 0
+  m_Name: UnitManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &173058514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173058513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f9f8d8b89d2f06458e88559f77a0335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &173058515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173058513}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 22
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &225722154
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,6 +432,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridVisualTransform: {fileID: 5648702865025462936, guid: 819a38f32732b3443b1528811382c8dc,
     type: 3}
+  gridVisualTypeMaterials:
+  - visualType: 0
+    material: {fileID: 2100000, guid: f951b03668d046b41bebd31d52d7fa97, type: 2}
+  - visualType: 1
+    material: {fileID: 2100000, guid: d3fded1b73e445f438add163f0c3e891, type: 2}
+  - visualType: 2
+    material: {fileID: 2100000, guid: 1b9ab7b17cb3e7b42b0e92a4bab0e12d, type: 2}
+  - visualType: 3
+    material: {fileID: 2100000, guid: 2d86f954555c0c8488ca6ca2dae81a2d, type: 2}
+  - visualType: 4
+    material: {fileID: 2100000, guid: 4ad9e3827f2dedb488e86e709f4b7092, type: 2}
 --- !u!4 &225722156
 Transform:
   m_ObjectHideFlags: 0
