@@ -6,9 +6,6 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     private GridPosition gridPosition;
-    private MoveAction moveAction;
-    private SpinAction spinAction;
-    private ShootAction shootAction;
     private HealthSystem healthSystem;
     private BaseAction[] baseActionArray;
     public static event EventHandler OnAnyActionPointsChanged;
@@ -21,11 +18,8 @@ public class Unit : MonoBehaviour
     [SerializeField] private int restoreActionPointsAmount = 4;
     private void Awake()
     {
-        moveAction = GetComponent<MoveAction>();
-        spinAction = GetComponent<SpinAction>();
         baseActionArray = GetComponents<BaseAction>();
         healthSystem = GetComponent<HealthSystem>();
-        shootAction = GetComponent<ShootAction>();
     }
     private void Start()
     {
@@ -34,6 +28,17 @@ public class Unit : MonoBehaviour
         TurnSystem.Instance.OnTurnChange += TurnSystem_OnTurnChange;
         healthSystem.OnDie += HealthSystem_OnDie;
         OnAnyUnitSpawned?.Invoke(this, EventArgs.Empty);
+    }
+    public T GetAction<T>() where T : BaseAction
+    {
+        foreach (var action in baseActionArray)
+        {
+            if (action is T actionOfType)
+            {
+                return actionOfType;
+            }
+        }
+        return null;
     }
 
     private void HealthSystem_OnDie(object sender, EventArgs e)
@@ -58,13 +63,11 @@ public class Unit : MonoBehaviour
         var newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         if (gridPosition != newGridPosition)
         {
+            var oldGridPosition = gridPosition;
             gridPosition = newGridPosition;
-            LevelGrid.Instance.UnitMovedGridPosition(this, gridPosition, newGridPosition);
+            LevelGrid.Instance.UnitMovedGridPosition(this, oldGridPosition, newGridPosition);
         }
     }
-    public MoveAction GetMoveAction() => moveAction;
-    public SpinAction GetSpinAction() => spinAction;
-    public ShootAction GetShootAction() => shootAction;
     public BaseAction[] GetBaseActionArray() => baseActionArray;
     public GridPosition GetGridPosition() => gridPosition;
 

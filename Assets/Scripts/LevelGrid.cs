@@ -6,9 +6,10 @@ using UnityEngine;
 public class LevelGrid : MonoBehaviour
 {
     public static LevelGrid Instance { get; private set; }
-    private GridSystem gridSystem;
+    private GridSystem<GridObject> gridSystem;
     [SerializeField] Transform debugTransform;
     public event EventHandler OnAnyUnitMovedGridPosition;
+    [SerializeField] private bool debug;
     private void Awake()
     {
         if (Instance != null)
@@ -19,8 +20,9 @@ public class LevelGrid : MonoBehaviour
         }
         Instance = this;
 
-        gridSystem = new GridSystem(10, 10, 2f);
-        gridSystem.CreateDebugObjects(debugTransform);
+        gridSystem = new GridSystem<GridObject>(10, 10, 2f, (grid, position) => new GridObject(grid, position));
+        if (debug)
+            gridSystem.CreateDebugObjects(debugTransform);
     }
 
     public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
