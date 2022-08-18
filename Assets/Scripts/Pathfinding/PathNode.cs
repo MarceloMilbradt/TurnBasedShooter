@@ -9,6 +9,7 @@ public class PathNode
     private int hCost;
     private int fCost;
     private PathNode cameFromNode;
+    private bool isWalkable = true;
     public PathNode(GridPosition position)
     {
         gridPosition = position;
@@ -41,5 +42,13 @@ public class PathNode
     public GridPosition GetGridPosition()
     {
         return gridPosition;
+    }
+    public bool IsWalkable()
+    {
+        return isWalkable;
+    }
+    public void SetWalkable(bool value)
+    {
+        isWalkable = value;
     }
 }

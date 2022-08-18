@@ -10,21 +10,29 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] Transform debugTransform;
     public event EventHandler OnAnyUnitMovedGridPosition;
     [SerializeField] private bool debug;
+
+    [SerializeField]  private int width;
+    [SerializeField]  private int height;
+    [SerializeField]  private float cellSize;
+
     private void Awake()
     {
         if (Instance != null)
         {
-            Debug.Log("There is more than one UnitActionSystem " + transform + " - " + Instance);
+            Debug.Log("There is more than one LevelGrid " + transform + " - " + Instance);
             Destroy(gameObject);
             return;
         }
         Instance = this;
 
-        gridSystem = new GridSystem<GridObject>(10, 10, 2f, (grid, position) => new GridObject(grid, position));
+        gridSystem = new GridSystem<GridObject>(width, height, cellSize, (grid, position) => new GridObject(grid, position));
         if (debug)
             gridSystem.CreateDebugObjects(debugTransform);
     }
-
+    private void Start()
+    {
+        Pathfinding.Instance.Setup(width, height, cellSize);
+    }
     public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
     {
         var gridObject = gridSystem.GetGridObject(gridPosition);

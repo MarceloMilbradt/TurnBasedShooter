@@ -18,7 +18,7 @@ public class Pathfinding : MonoBehaviour
 
     [SerializeField] private bool debug;
     [SerializeField] Transform debugTransform;
-
+    [SerializeField] private LayerMask obstacleLayerMask;
     private void Awake()
     {
         if (Instance != null)
@@ -28,13 +28,30 @@ public class Pathfinding : MonoBehaviour
             return;
         }
         Instance = this;
-
-
-        gridSystem = new GridSystem<PathNode>(10, 10, 2f, (_, gp) => new PathNode(gp));
+    }
+    public void Setup(int width, int height, float cellSize)
+    {
+        this.width = width;
+        this.height = height;
+        this.cellSize = cellSize;
+        gridSystem = new GridSystem<PathNode>(width, height, cellSize, (_, gp) => new PathNode(gp));
         if (debug)
             gridSystem.CreateDebugObjects(debugTransform);
-    }
 
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < height; z++)
+            {
+                GridPosition gridPosition = new GridPosition(x, z);
+                Vector3 worldPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+                float raycastOffset = 5f;
+                if (Physics.Raycast(worldPosition + Vector3.down * raycastOffset, Vector3.up, raycastOffset * 2, obstacleLayerMask))
+                {
+                    GetNode(x, z).SetWalkable(false);
+                }
+            }
+        }
+    }
     public List<GridPosition> FindPath(GridPosition startGridPostion, GridPosition endGridPosition)
     {
         List<PathNode> openList = new List<PathNode>();
@@ -77,7 +94,11 @@ public class Pathfinding : MonoBehaviour
             foreach (var neighbourNode in GetNeighbours(currentNode))
             {
                 if (closedList.Contains(neighbourNode)) continue;
-
+                if (!neighbourNode.IsWalkable())
+                {
+                    closedList.Add(neighbourNode);
+                    continue;
+                }
                 int tentativeGCost = currentNode.GetGCost() + CalculateDistance(currentNode.GetGridPosition(), neighbourNode.GetGridPosition());
                 if (tentativeGCost < neighbourNode.GetGCost())
                 {
