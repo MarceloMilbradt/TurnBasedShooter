@@ -44,6 +44,7 @@ public class Unit : MonoBehaviour
     private void HealthSystem_OnDie(object sender, EventArgs e)
     {
         LevelGrid.Instance.RemoveUnitAtGridPosition(gridPosition, this);
+        TurnSystem.Instance.OnTurnChange -= TurnSystem_OnTurnChange;
         Destroy(gameObject);
         OnAnyUnitDead?.Invoke(this, EventArgs.Empty);
     }

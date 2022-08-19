@@ -9,36 +9,35 @@ public class MoveAction : BaseAction
     public event EventHandler OnStop;
     [SerializeField] private int maxDistance = 4;
 
-    private Vector3 targetPosition;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        targetPosition = transform.position;
-    }
-
+    private List<Vector3> positionLists;
+    private int currentPositionIndex;
     // Update is called once per frame
     void Update()
     {
         if (!isActive) return;
 
         float stoppingDistance = .1f;
+        Vector3 targetPosition = positionLists[currentPositionIndex];
         bool isMoving = Vector3.Distance(transform.position, targetPosition) >= stoppingDistance;
         Vector3 moveDirection = (targetPosition - transform.position).normalized;
+        float rotateSpeed = 10f;
+        transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
         if (isMoving)
         {
             float moveSpeed = 4f;
             transform.position += moveSpeed * Time.deltaTime * moveDirection;
         }
-        float rotateSpeed = 10f;
-        transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
         if (!isMoving)
         {
-            OnStop?.Invoke(this, EventArgs.Empty);
-            ActionComplete();
+            currentPositionIndex++;
+            if (currentPositionIndex >= positionLists.Count)
+            {
+                OnStop?.Invoke(this, EventArgs.Empty);
+                ActionComplete();
+            }
         }
     }
-   
+
     public override List<GridPosition> GetValidActionsGridPositionList()
     {
         List<GridPosition> validPositions = new List<GridPosition>();
@@ -50,9 +49,17 @@ public class MoveAction : BaseAction
                 GridPosition offsetGridPosition = new GridPosition(x, z);
                 GridPosition testGridPosition = unitGridPostion + offsetGridPosition;
                 bool isValid = LevelGrid.Instance.IsValidGridPosition(testGridPosition);
+
                 if (!isValid) continue; //fora da grid
                 if (unitGridPostion == testGridPosition) continue; //na posiçao que já está
                 if (LevelGrid.Instance.HasAnyUnitOnPosition(testGridPosition)) continue; // ja tem uma unidade
+                if (!Pathfinding.Instance.IsWalkableGridPosition(testGridPosition)) continue; //Nao é um lugar que pode ter unidades (paredes, pilares...)
+                if (!Pathfinding.Instance.HasPath(unitGridPostion, testGridPosition)) continue; //Não é alcançavel
+
+                var pathLength = Pathfinding.Instance.GetPathLength(unitGridPostion, testGridPosition);
+
+                if (pathLength > maxDistance * 10) continue; //Muito Longe
+
                 validPositions.Add(testGridPosition);
             }
         }
@@ -60,7 +67,13 @@ public class MoveAction : BaseAction
     }
     public override void TakeAction(GridPosition target, Action action)
     {
-        targetPosition = LevelGrid.Instance.GetWorldPosition(target);
+        List<GridPosition> gridPositions = Pathfinding.Instance.FindPath(unit.GetGridPosition(), target, out _);
+        currentPositionIndex = 0;
+        positionLists = new List<Vector3>();
+        foreach (var position in gridPositions)
+        {
+            positionLists.Add(LevelGrid.Instance.GetWorldPosition(position));
+        }
         OnStart?.Invoke(this, EventArgs.Empty);
         ActionStart(action);
     }

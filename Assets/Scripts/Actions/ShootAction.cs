@@ -13,6 +13,7 @@ public class ShootAction : BaseAction
     public event EventHandler<OnShootEventAgrs> OnStart;
     public event EventHandler OnStop;
     [SerializeField] private int maxShootDistance = 7;
+    [SerializeField] private LayerMask obstaclesLayerMask;
     private enum State
     {
         Aiming,
@@ -109,11 +110,22 @@ public class ShootAction : BaseAction
                 GridPosition testGridPosition = position + offsetGridPosition;
                 bool isValid = LevelGrid.Instance.IsValidGridPosition(testGridPosition);
                 int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
+
                 if (testDistance > maxShootDistance) continue;
                 if (!isValid) continue; //fora da grid
                 if (!LevelGrid.Instance.HasAnyUnitOnPosition(testGridPosition)) continue; // nao tem uma unidade
+
                 Unit unitAtPosition = LevelGrid.Instance.GetUnitAtPosition(testGridPosition);
                 if (unitAtPosition.IsEnemy() == unit.IsEnemy()) continue;
+
+
+                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(position);
+                Vector3 shootDirection = (unitAtPosition.GetWorldPosition() - unitWorldPosition).normalized;
+                float maxDistance = Vector3.Distance(unitWorldPosition, unitAtPosition.GetWorldPosition());
+                Vector3 origin = unitWorldPosition + Vector3.up * 1.7f;
+
+                if (Physics.Raycast(origin, shootDirection, maxDistance, obstaclesLayerMask)) continue; //tem algo na frente (parede, pilar...)
+
                 validPositions.Add(testGridPosition);
             }
         }

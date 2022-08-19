@@ -11,7 +11,7 @@ public class Testing : MonoBehaviour
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
             GridPosition startGridPosition = new GridPosition(0, 0);
 
-            List<GridPosition> gridPositions = Pathfinding.Instance.FindPath(startGridPosition, mouseGridPosition);
+            List<GridPosition> gridPositions = Pathfinding.Instance.FindPath(startGridPosition, mouseGridPosition, out _);
             for (int i = 0; i < gridPositions.Count - 1; i++)
             {
                 Debug.DrawLine(
