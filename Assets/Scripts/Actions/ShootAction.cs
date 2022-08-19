@@ -10,7 +10,8 @@ public class ShootAction : BaseAction
         public Unit targetUnit;
         public Unit originUnit;
     }
-    public event EventHandler<OnShootEventAgrs> OnStart;
+    public event EventHandler<OnShootEventAgrs> OnShoot;
+    public static event EventHandler<OnShootEventAgrs> OnAnyShoot;
     public event EventHandler OnStop;
     [SerializeField] private int maxShootDistance = 7;
     [SerializeField] private LayerMask obstaclesLayerMask;
@@ -58,7 +59,12 @@ public class ShootAction : BaseAction
 
     private void Shoot()
     {
-        OnStart?.Invoke(this, new OnShootEventAgrs
+        OnShoot?.Invoke(this, new OnShootEventAgrs
+        {
+            targetUnit = target,
+            originUnit = unit
+        });
+        OnAnyShoot?.Invoke(this, new OnShootEventAgrs
         {
             targetUnit = target,
             originUnit = unit

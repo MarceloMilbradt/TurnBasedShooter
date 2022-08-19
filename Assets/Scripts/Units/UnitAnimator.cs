@@ -16,7 +16,7 @@ public class UnitAnimator : MonoBehaviour
         }
         if (TryGetComponent(out ShootAction shootAction))
         {
-            shootAction.OnStart += ShootAction_OnStart;
+            shootAction.OnShoot += ShootAction_OnStart;
         }
     }
 
